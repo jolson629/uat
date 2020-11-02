@@ -56,8 +56,8 @@ class Testing(unittest.TestCase):
 
       self.start_time = tick = datetime.now()
       self.logger = initLog()
-      self.target_session = target_session.target_session(self.global_config['foundry']['proxy'])
-      self.source_session = source_session.source_session(self.global_config['teradata']['host'],self.global_config['teradata']['user'],self.global_config['teradata']['password'],self.global_config['teradata']['database'])
+      self.target_session = target_session.target_session(self.global_config['bigdata']['proxy'])
+      self.source_session = source_session.source_session(self.global_config['sql']['host'],self.global_config['sql']['user'],self.global_config['sql']['password'],self.global_config['sql']['database'])
 
    def test_xref_pnr_customer(self):
 
@@ -65,7 +65,7 @@ class Testing(unittest.TestCase):
          return pd.read_sql(self.local_config['source']['query'],self.source_session)
       
       def get_target_data():
-         retval = target_session.get_target_data(self.target_session, self.global_config['foundry']['api_token'], self.global_config['foundry']['api_url'], self.local_config['target']['query'])
+         retval = target_session.get_target_data(self.target_session, self.global_config['target']['api_token'], self.global_config['target']['api_url'], self.local_config['target']['query'])
          return retval
             
       # Load source...

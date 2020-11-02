@@ -1,5 +1,5 @@
 test:
-   name: xref_pnr_customer
+   name: xref_customer
 source:
    query: select ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY active_dtmz) as RELATIVE_ORDER, creation_dt as CREATION_DT, customer_id as CUSTOMER_ID, active_dtmz as ACTIVE_DTMZ, inactive_dtmz as INACTIVE_DTMZ, is_creator as IS_CREATOR, update_dtmz as UPDATE_DTMZ from <db>.<table> where creation_dt = '2020-01-31'
    trim:

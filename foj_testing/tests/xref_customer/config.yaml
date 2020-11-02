@@ -1,0 +1,43 @@
+test:
+   name: xref_pnr_customer
+source:
+   query: select ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY active_dtmz) as RELATIVE_ORDER, creation_dt as CREATION_DT, customer_id as CUSTOMER_ID, active_dtmz as ACTIVE_DTMZ, inactive_dtmz as INACTIVE_DTMZ, is_creator as IS_CREATOR, update_dtmz as UPDATE_DTMZ from <db>.<table> where creation_dt = '2020-01-31'
+   trim:
+      - <fiels to trim>
+   to_integer:
+      - <int columns>
+   to_datetime:
+      - CREATION_DT
+   from_datetime_format: "%Y-%m-%dT%H:%M:%S.000Z"
+   join_fields: 
+      - CUSTOMER_ID
+      - RELATIVE_ORDER
+   match_columns:
+      - <match columns>
+target:
+   query: select ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID ORDER BY ACTIVE_DTMZ) as RELATIVE_ORDER,  CREATION_DT,  CUSTOMER_ID, ACTIVE_DTMZ, INACTIVE_DTMZ, IS_CREATOR, UPDATE_DTMZ from `master`.`dataset` where CREATION_DT = '2020-01-31'
+   to_integer:
+      - CUSTOMER_ID
+   trim:
+      - <fields to trim>
+   join_fields:
+      - CUSTOMER_ID
+      - RELATIVE_ORDER
+   match_columns:
+      - <match columns>
+mismatches:
+   output:
+      - _merge
+      - status
+      - mismatched_columns
+      - <outputs>
+matches:
+   output:
+      - CUSTOMER_ID
+      - RELATIVE_ORDER
+      - ACTIVE_DTMZ_source
+      - ACTIVE_DTMZ_target
+      - INACTIVE_DTMZ_source
+      - INACTIVE_DTMZ_target
+
+
